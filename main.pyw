@@ -9,8 +9,7 @@ from short_chain import short_chain
 from words_chains import words_chains
 
 
-# exercises_libs = {word_ass : "#ffc9c9", short_chain : '#e0ffff', words_chains : '#e1ffe0'}
-exercises_libs = {words_chains : '#e1ffe0'}
+exercises_libs = {word_ass : "#ffc9c9", short_chain : '#e0ffff', words_chains : '#e1ffe0'}
 BACKGROUNG = '#fff3d1'
 
 class MainFrame(tk.Frame):
@@ -27,7 +26,7 @@ class MainFrame(tk.Frame):
         menu_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         for index, lib in enumerate(exercises_libs.keys()):
-            ex_button = tk.Button(menu_frame, text=lib.name, width=20)
+            ex_button = tk.Button(menu_frame, text=lib.EXERCISE_NAME, width=20)
             ex_button.configure(font=('Arial 16'), bg=exercises_libs[lib])
             ex_button.configure(command=lambda lib=lib: self.create_exercise(exercise_lib=lib))
             ex_button.grid(row=index, pady=10, sticky='swen')
@@ -36,7 +35,7 @@ class MainFrame(tk.Frame):
         self.pack_forget()
 
         reload(exercise_lib)
-        self.exercise_frame = exercise_lib.Exercise_GUI(self.master, bg=exercises_libs[exercise_lib])
+        self.exercise_frame = exercise_lib.Exercise_GUI(self.master, main_menu=self, bg=exercises_libs[exercise_lib])
         self.exercise_frame.pack(fill=tk.BOTH, expand=True)
 
     def display_main_menu(self):
@@ -52,7 +51,7 @@ if __name__ == "__main__":
     
     root = tk.Tk()
 
-    height = 650
+    height = 675
     width = 650
     screen_w = root.winfo_screenwidth()
     screen_h = root.winfo_screenheight()

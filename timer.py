@@ -8,12 +8,12 @@ from dateutil.parser import parse
 NULL_TIME = datetime(year=2020, month=10, day=1, hour=0, minute=0, second=0)
 
 class Timer_GUI(tk.Frame):
-    def __init__(self, master, start_function=None, end_fuction=None, cnf={}, **kw):
+    def __init__(self, master, start_function=None, stop_function=None, cnf={}, **kw):
         tk.Frame.__init__(self, master, cnf, **kw)
 
         self.timer_var = tk.StringVar()
         self.start_function = start_function
-        self.end_function = end_fuction
+        self.stop_function = stop_function
         self.is_timer_work = False
         self.worked_time = timedelta(seconds=0)
         self.last_added_time = timedelta(seconds=0)
@@ -44,8 +44,9 @@ class Timer_GUI(tk.Frame):
         return dateutil.parser.parse(self.timer_var.get())
     
     def add_start_time(self):
-        self.last_added_time = self.worked_time
-        self.set_time(time=self.get_time() + timedelta(seconds=self.start_time.second))
+        if self.is_timer_work:
+            self.last_added_time = self.worked_time
+            self.set_time(time=self.get_time() + timedelta(seconds=self.start_time.second))
 
     def start_timer(self):
         if self.is_timer_work:
@@ -56,6 +57,7 @@ class Timer_GUI(tk.Frame):
 
         self.is_timer_work = True
         self.worked_time = timedelta(seconds=0)
+        self.last_added_time = timedelta(seconds=0)
         self.start_time = self.get_time()
         self.count_time()
         self.focus()
@@ -79,8 +81,8 @@ class Timer_GUI(tk.Frame):
         winsound.Beep(2500, 750)
         self.set_time(time=self.start_time)
 
-        if self.end_function:
-            self.end_function()
+        if self.stop_function:
+            self.stop_function()
 
 if __name__ == "__main__":
     
