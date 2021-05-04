@@ -83,9 +83,10 @@ class Exercise_GUI(exercise.Exercise_GUI):
             return
 
         self.clear_right_text()
+        self.tip_text_set(text='')
         self.clear_chain_entries()
         self.recalculate_totals()
-        self.focus_set()
+        self.second_word_entry.focus()
     
     def generate_random_words(self):
         if not self.first_word_entry.get():
@@ -109,8 +110,8 @@ class Exercise_GUI(exercise.Exercise_GUI):
                 self.third_word_entry.delete(0, tk.END)
             return
 
+        self.third_word_entry.focus()
         self.check_chain()
-        self.focus_set()
 
     def check_chain(self):
         if self.exercise.is_chain_right(words_chain=self.get_entries_chain()):
@@ -118,6 +119,7 @@ class Exercise_GUI(exercise.Exercise_GUI):
             self.recalculate_totals()
             self.clear_chain_entries()
             self.timer.add_start_time()
+            self.second_word_entry.focus()
 
     def recalculate_totals(self):
         self.three_total_depths_label['text'] = self.exercise.get_three_depths_total()
@@ -128,17 +130,19 @@ class Exercise_GUI(exercise.Exercise_GUI):
         self.third_word_entry.delete(0, tk.END)
 
     def show_word(self):
-        word = self.second_word_entry.get()
+        entry_word = self.second_word_entry.get()
         words_chain = self.get_entries_chain()
         
-        if not self.exercise.is_chain_word_right(word=word, words_chain=words_chain):
+        if not self.exercise.is_chain_word_right(word=entry_word, words_chain=words_chain):
             self.clear_chain_entries()
-            self.second_word_entry.insert(0, self.exercise.get_first_chain_word())
+            tip_word = self.exercise.get_first_chain_word()
+            self.second_word_entry.insert(0, tip_word)
         else:
             self.third_word_entry.delete(0, tk.END)
-            self.third_word_entry.insert(0, self.exercise.get_second_chain_word(words_chain=words_chain))
+            tip_word = self.exercise.get_second_chain_word(words_chain=words_chain)
+            self.third_word_entry.insert(0, tip_word)
 
-        self.check_chain()
+        self.check_word(word=tip_word)
 
     def get_tip(self):
         word = self.second_word_entry.get()
